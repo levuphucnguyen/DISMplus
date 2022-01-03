@@ -187,6 +187,9 @@ choice /c:123 /n /m "Lựa chọn của bạn: "
 if errorlevel 3 dism /online /cleanup-image /restorehealth
 if errorlevel 2 dism /online /cleanup-image /scanhealth
 if errorlevel 1 dism /online /cleanup-image /checkhealth
+echo Nhấn phím bất kỳ để thoát...
+pause >nul
+exit
 
 :modifyoffline
 set /p image=Vui lòng điền đường dẫn đến nơi chứa hệ điều hành cần modify: 
@@ -225,3 +228,6 @@ choice /c:123 /n /m "Lựa chọn của bạn: "
 if errorlevel 3 dism /image:%image% /cleanup-image /restorehealth
 if errorlevel 2 dism /image:%image% /cleanup-image /scanhealth
 if errorlevel 1 dism /image:%image% /cleanup-image /checkhealth
+echo Nhấn phím bất kỳ để thoát...
+pause >nul
+exit
