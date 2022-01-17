@@ -86,7 +86,7 @@ echo.
 set /p imagefile=Nhập đường dẫn đến file cần tạo: 
 set /p capturedir=Nhập đường dẫn đến nơi cần capture: 
 set /p name=Nhập tên Index: 
-choice /c:MFN /n /m "Vui lòng chọn mức độ nén (M:max/F:fast/N:none): "
+choice /c:MFN /n /m "Chọn mức độ nén (M:max/F:fast/N:none): "
 if errorlevel 3 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:none
 if errorlevel 2 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:fast
 if errorlevel 1 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:max
@@ -107,7 +107,7 @@ echo.
 set /p sourceimagefile=Nhập đường dẫn đến file gốc: 
 set /p sourceindex=Nhập số Index cần export của file gốc: 
 set /p destinationimagefile=Nhập đường dẫn đến file đích: 
-choice /c:MFNR /n /m "Vui lòng chọn mức độ nén (M:max/F:fast/N:none/R:recovery): "
+choice /c:MFNR /n /m "Chọn mức độ nén (M:max/F:fast/N:none/R:recovery): "
 if errorlevel 4 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:recovery
 if errorlevel 3 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:none
 if errorlevel 2 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:fast
