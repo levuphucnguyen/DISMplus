@@ -44,7 +44,7 @@ echo.===========================================================================
 echo.				Get Image Info
 echo.===============================================================================
 echo.
-choice /c:TC /n /m "Bạn muốn xem thông tin tổng quát của file hay thông tin chi tiết của một Index? (T:Tổng quát/C:Chi tiết) "
+choice /c:TC /n /m "Bạn muốn xem thông tin tổng quát của file hay thông tin chi tiết của một Index? ('T'ổng quát/'C'hi tiết) "
 if errorlevel 2 goto :detailinfo
 if errorlevel 1 goto :fullinfo
 
@@ -86,7 +86,7 @@ echo.
 set /p imagefile=Nhập đường dẫn đến file cần tạo: 
 set /p capturedir=Nhập đường dẫn đến nơi cần capture: 
 set /p name=Nhập tên Index: 
-choice /c:MFN /n /m "Chọn mức độ nén (M:max/F:fast/N:none): "
+choice /c:MFN /n /m "Chọn mức độ nén ('M'ax/'F'ast/'N'one): "
 if errorlevel 3 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:none
 if errorlevel 2 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:fast
 if errorlevel 1 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:max
@@ -107,7 +107,7 @@ echo.
 set /p sourceimagefile=Nhập đường dẫn đến file gốc: 
 set /p sourceindex=Nhập số Index cần export của file gốc: 
 set /p destinationimagefile=Nhập đường dẫn đến file đích: 
-choice /c:MFNR /n /m "Chọn mức độ nén (M:max/F:fast/N:none/R:recovery): "
+choice /c:MFNR /n /m "Chọn mức độ nén ('M'ax/'F'ast/'N'one/'R'ecovery): "
 if errorlevel 4 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:recovery
 if errorlevel 3 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:none
 if errorlevel 2 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:fast
@@ -137,7 +137,7 @@ echo.				Unmount Image
 echo.===============================================================================
 echo.
 set /p mountdir=Nhập đường dẫn đến nơi đã được mount: 
-choice /c:CD /n /m "Bạn có muốn lưu các thay đổi không? (C:Commit/D:Discard) "
+choice /c:CD /n /m "Bạn có muốn lưu các thay đổi không? ('C'ommit/'D'iscard) "
 if errorlevel 2 dism /unmount-image /mountdir:%mountdir% /discard
 if errorlevel 1 dism /unmount-image /mountdir:%mountdir% /commit
 echo Nhấn phím bất kỳ để thoát...
@@ -150,14 +150,13 @@ echo.===========================================================================
 echo.				Modify Image
 echo.===============================================================================
 echo.
-choice /c:CK /n /m "Bạn muốn sửa lỗi HĐH đang chạy hay HĐH khác trên máy? (C:HĐH đang chạy/K:HĐH khác) "
-if errorlevel 2 goto :offline
-if errorlevel 1 set oo=online
-goto :modifymenu
-
-:offline
+choice /c:CK /n /m "Bạn muốn sửa lỗi HĐH đang chạy hay HĐH khác trên máy? (HĐH đang 'c'hạy/HĐH 'k'hác) "
+if errorlevel 2 (
 set /p image=Nhập đường dẫn đến nơi chứa hệ điều hành cần modify: 
 set oo=image:%image%
+)
+if errorlevel 1 set oo=online
+goto :modifymenu
 
 :modifymenu
 cls
@@ -212,7 +211,7 @@ echo.
 choice /c:12 /n /m "Lựa chọn của bạn: "
 if errorlevel 2 goto :startcomponentcleanup
 if errorlevel 1 dism /%oo% /cleanup-image /analyzecomponentstore
-choice /c:CK /n /m "Bạn có muốn tiếp tục Start Component Cleanup không? (C:Có/K:Không) "
+choice /c:CK /n /m "Bạn có muốn tiếp tục Start Component Cleanup không? ('C'ó/'K'hông) "
 if errorlevel 2 exit
 if error level 1 goto :startcomponentcleanup
 
@@ -222,7 +221,7 @@ echo.===========================================================================
 echo.				Start Component Cleanup
 echo.===============================================================================
 echo.
-choice /c:CK /n /m "Bạn có muốn Reset Base không? (C:Có/K:Không) "
+choice /c:CK /n /m "Bạn có muốn Reset Base không? ('C'ó/'K'hông) "
 if errorlevel 2 dism /%oo% /cleanup-image /startcomponentcleanup
 if errorlevel 1 goto :resetbase
 echo Nhấn phím bất kỳ để thoát...
@@ -231,11 +230,11 @@ exit
 
 :resetbase
 echo.===============================================================================
-echo. 		Cảnh báo: Lệnh này sẽ xóa hết các bản sao lưu cập nhật,
+echo. 		Cảnh báo: Lệnh này sẽ xóa hết các bản sao lưu cập nhật
 echo.			nên bạn không thể gỡ cài đặt bản cập nhật
 echo.===============================================================================
 echo.
-choice /c:CK /n /m "Bạn có muốn tiếp tục? (C:Có/K:Không) "
+choice /c:CK /n /m "Bạn có muốn tiếp tục? ('C'ó/'K'hông) "
 if errorlevel 2 exit
 if errorlevel 1 dism /%oo% /cleanup-image /startcomponentcleanup /resetbase
 echo Nhấn phím bất kỳ để thoát...
@@ -274,7 +273,7 @@ exit
 
 :adddriver
 set /p driver=Nhập đường dẫn đến thư mục chứa driver: 
-choice /c:CK /n /m "Bạn có muốn thêm driver trong những thư mục con không? (C:Có/K:Không) "
+choice /c:CK /n /m "Bạn có muốn thêm driver trong những thư mục con không? ('C'ó/'K'hông) "
 if errorlevel 2 dism /%oo% /add-driver /driver:%driver%
 if errorlevel 1 dism /%oo% /add-driver /driver:%driver% /recurse
 echo Nhấn phím bất kỳ để thoát...
@@ -332,7 +331,7 @@ set /p imagefile=Nhập đường dẫn đến file install.wim trong bộ cài 
 set /p index=Nhập số Index của phiên bản cần cài: 
 set /p applydir=Nhập ký tự của phân vùng chứa Windows (bao gồm dấu ":"): 
 set /p s=Nhập ký tự của phân vùng Boot (bao gồm dấu ":"): 
-choice /c:LU2 /n /m "Bạn muốn cài Windows theo chuẩn nào? (L:Legacy BIOS/U:UEFI/2:Cả 2 chuẩn) "
+choice /c:LU2 /n /m "Bạn muốn cài Windows theo chuẩn nào? ('L'egacy BIOS/'U'EFI/Cả '2' chuẩn) "
 if errorlevel 3 set f=All
 if errorlevel 2 set f=UEFI
 if errorlevel 1 set f=BIOS
