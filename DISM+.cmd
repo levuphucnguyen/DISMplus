@@ -2,6 +2,8 @@
 color f0
 chcp 65001 >nul
 title DISM+ by Lê Vũ Phúc Nguyên
+:main
+cls
 echo.===============================================================================
 echo.				DISM+ - Main Menu
 echo.===============================================================================
@@ -51,17 +53,13 @@ if errorlevel 1 goto :fullinfo
 :fullinfo
 set /p imagefile=Nhập đường dẫn đến file cần xem thông tin: 
 dism /get-imageinfo /imagefile:%imagefile%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :detailinfo
 set /p imagefile=Nhập đường dẫn đến file cần xem thông tin: 
 set /p index=Nhập số Index: 
 dism /get-imageinfo /imagefile:%imagefile% /index:%index%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :apply
 cls
@@ -73,9 +71,7 @@ set /p imagefile=Nhập đường dẫn đến file cần bung:
 set /p index=Nhập số Index: 
 set /p applydir=Nhập đường dẫn đến nơi bung file: 
 dism /apply-image /imagefile:%imagefile% /index:%index% /applydir:%applydir%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :capture
 cls
@@ -90,9 +86,7 @@ choice /c:MFN /n /m "Chọn mức độ nén ('M'ax/'F'ast/'N'one): "
 if errorlevel 3 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:none
 if errorlevel 2 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:fast
 if errorlevel 1 dism /capture-image /imagefile:%imagefile% /capturedir:%capturedir% /name:%name% /compress:max
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :export
 cls
@@ -100,9 +94,12 @@ echo.===========================================================================
 echo.				Export Image
 echo.===============================================================================
 echo.
-echo. Lưu ý: Nếu file đích là một file có sẵn thì file gốc và file đích phải có cùng mức độ nén
-echo.        Tùy chọn mức độ nén sẽ không có hiệu lực nếu file đích là một file có sẵn
-echo.        Nếu dùng compress là recovery thì file đích phải có đuôi mở rộng là .esd
+echo.-------------------------------------------------------------------------------
+echo. Lưu ý: 
+echo. Nếu file đích là một file có sẵn thì file gốc và file đích phải có cùng mức độ nén
+echo. Tùy chọn mức độ nén sẽ không có hiệu lực nếu file đích là một file có sẵn
+echo. Nếu dùng compress là recovery thì file đích phải có đuôi mở rộng là .esd
+echo.-------------------------------------------------------------------------------
 echo.
 set /p sourceimagefile=Nhập đường dẫn đến file gốc: 
 set /p sourceindex=Nhập số Index cần export của file gốc: 
@@ -112,9 +109,7 @@ if errorlevel 4 dism /export-image /sourceimagefile:%sourceimagefile% /sourceind
 if errorlevel 3 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:none
 if errorlevel 2 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:fast
 if errorlevel 1 dism /export-image /sourceimagefile:%sourceimagefile% /sourceindex:%sourceindex% /destinationimagefile:%destinationimagefile% /compress:max
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :mount
 cls
@@ -126,9 +121,7 @@ set /p imagefile=Nhập đường dẫn đến file cần mount:
 set /p index=Nhập số Index cần mount: 
 set /p mountdir=Nhập đường dẫn đến nơi cần mount ra: 
 dism /mount-image /imagefile:%imagefile% /index:%index% /mountdir:%mountdir%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :unmount
 cls
@@ -140,9 +133,7 @@ set /p mountdir=Nhập đường dẫn đến nơi đã được mount:
 choice /c:CD /n /m "Bạn có muốn lưu các thay đổi không? ('C'ommit/'D'iscard) "
 if errorlevel 2 dism /unmount-image /mountdir:%mountdir% /discard
 if errorlevel 1 dism /unmount-image /mountdir:%mountdir% /commit
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :modify
 cls
@@ -172,6 +163,8 @@ echo.				   [3] Drivers
 echo.
 echo.				   [4] Packages
 echo.
+echo.-------------------------------------------------------------------------------
+echo.
 choice /c:1234 /n /m "Lựa chọn của bạn: "
 if errorlevel 4 goto :packages
 if errorlevel 3 goto :drivers
@@ -190,13 +183,13 @@ echo.				  [2] Scan Health
 echo.
 echo.				  [3] Restore Health
 echo.
+echo.-------------------------------------------------------------------------------
+echo.
 choice /c:123 /n /m "Lựa chọn của bạn: "
 if errorlevel 3 dism /%oo% /cleanup-image /restorehealth
 if errorlevel 2 dism /%oo% /cleanup-image /scanhealth
 if errorlevel 1 dism /%oo% /cleanup-image /checkhealth
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :cleanup
 cls
@@ -208,11 +201,13 @@ echo.			    [1] Analyze Component Store
 echo.
 echo.			    [2] Start Component Cleanup
 echo.
+echo.-------------------------------------------------------------------------------
+echo.
 choice /c:12 /n /m "Lựa chọn của bạn: "
 if errorlevel 2 goto :startcomponentcleanup
 if errorlevel 1 dism /%oo% /cleanup-image /analyzecomponentstore
 choice /c:CK /n /m "Bạn có muốn tiếp tục Start Component Cleanup không? ('C'ó/'K'hông) "
-if errorlevel 2 exit
+if errorlevel 2 goto :outtro
 if error level 1 goto :startcomponentcleanup
 
 :startcomponentcleanup
@@ -224,22 +219,18 @@ echo.
 choice /c:CK /n /m "Bạn có muốn Reset Base không? ('C'ó/'K'hông) "
 if errorlevel 2 dism /%oo% /cleanup-image /startcomponentcleanup
 if errorlevel 1 goto :resetbase
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :resetbase
-echo.===============================================================================
+echo.-------------------------------------------------------------------------------
 echo. 		Cảnh báo: Lệnh này sẽ xóa hết các bản sao lưu cập nhật
 echo.			nên bạn không thể gỡ cài đặt bản cập nhật
-echo.===============================================================================
+echo.-------------------------------------------------------------------------------
 echo.
 choice /c:CK /n /m "Bạn có muốn tiếp tục? ('C'ó/'K'hông) "
-if errorlevel 2 exit
+if errorlevel 2 goto :outtro
 if errorlevel 1 dism /%oo% /cleanup-image /startcomponentcleanup /resetbase
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :drivers
 cls
@@ -255,37 +246,31 @@ echo.				[3] Add Driver
 echo.
 echo.				[4] Remove Driver
 echo.
+echo.-------------------------------------------------------------------------------
+echo.
 choice /c:1234 /n /m "Lựa chọn của bạn: "
 if errorlevel 4 goto :removedriver
 if errorlevel 3 goto :adddriver
 if errorlevel 2 goto :exportdriver
 if errorlevel 1 dism /%oo% /get-drivers
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :exportdriver
 set /p destination=Nhập đường dẫn đến nơi xuất driver: 
 dism /%oo% /export-driver /destination:%destination%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :adddriver
 set /p driver=Nhập đường dẫn đến thư mục chứa driver: 
 choice /c:CK /n /m "Bạn có muốn thêm driver trong những thư mục con không? ('C'ó/'K'hông) "
 if errorlevel 2 dism /%oo% /add-driver /driver:%driver%
 if errorlevel 1 dism /%oo% /add-driver /driver:%driver% /recurse
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :removedriver
 set /p driver=Nhập tên driver cần xóa: 
 dism /%oo% /remove-driver /driver:%driver%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :packages
 cls
@@ -299,27 +284,23 @@ echo.				[2] Add Package
 echo.
 echo.				[3] Remove Package
 echo.
+echo.-------------------------------------------------------------------------------
+echo.
 choice /c:123 /n /m "Lựa chọn của bạn: "
 if errorlevel 3 goto :removepackage
 if errorlevel 2 goto :addpackage
 if errorlevel 1 dism /%oo% /get-packages
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :addpackage
 set /p packagepath=Nhập đường dẫn đến file Package (.cab) cần thêm: 
 dism /%oo% /add-package /packagepath:%packagepath%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :removepackage
 set /p packagename=Nhập tên của Package cần xóa: 
 dism /%oo% /remove-package /packagename:%packagename%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
 
 :setup
 cls
@@ -337,6 +318,9 @@ if errorlevel 2 set f=UEFI
 if errorlevel 1 set f=BIOS
 dism /apply-image /imagefile:%imagefile% /index:%index% /applydir:%applydir%
 bcdboot %applydir%\Windows /s %s% /f %f%
-echo Nhấn phím bất kỳ để thoát...
-pause >nul
-exit
+goto :outtro
+
+:outtro
+choice /c:CK /n /m "Bạn có muốn thoát? ('C'ó/'Không) "
+if errorlevel 2 goto :main
+if errorlevel 1 exit
