@@ -321,6 +321,6 @@ bcdboot %applydir%\Windows /s %s% /f %f%
 goto :outtro
 
 :outtro
-choice /c:CK /n /m "Bạn có muốn thoát? ('C'ó/'Không) "
+choice /c:CK /n /m "Bạn có muốn thoát? ('C'ó/'K'hông) "
 if errorlevel 2 goto :main
 if errorlevel 1 exit
