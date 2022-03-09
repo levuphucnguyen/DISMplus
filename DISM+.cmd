@@ -47,19 +47,17 @@ echo.				Get Image Info
 echo.===============================================================================
 echo.
 choice /c:TC /n /m "Bạn muốn xem thông tin tổng quát của file hay thông tin chi tiết của một Index? ('T'ổng quát/'C'hi tiết) "
-if errorlevel 2 goto :detailinfo
-if errorlevel 1 goto :fullinfo
-
-:fullinfo
-set /p imagefile=Nhập đường dẫn đến file cần xem thông tin: 
-dism /get-imageinfo /imagefile:%imagefile%
-goto :outtro
-
-:detailinfo
+if errorlevel 2 (
 set /p imagefile=Nhập đường dẫn đến file cần xem thông tin: 
 set /p index=Nhập số Index: 
 dism /get-imageinfo /imagefile:%imagefile% /index:%index%
 goto :outtro
+)
+if errorlevel 1 (
+set /p imagefile=Nhập đường dẫn đến file cần xem thông tin: 
+dism /get-imageinfo /imagefile:%imagefile%
+goto :outtro
+)
 
 :apply
 cls
